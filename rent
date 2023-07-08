@@ -1,0 +1,107 @@
+package Rentride;
+
+public class driver {
+	private String name;
+	private String Model;
+	private double rate;
+	private double distance;
+	public driver(String name,String Model,double rate,double distance) {
+		this.name= name;
+		this.Model=Model;
+		this.rate=rate;
+		this.distance=distance;
+
+	}
+
+	public String getname() {
+		return name;
+	}
+	public void setname(String name) {
+		this.name = name;
+	}
+	public String getModel() {
+		return Model;
+	}
+	public void setModel(String model) {
+		Model = model;
+	}
+  
+  
+  package Rentride;
+
+public class service {
+	private double charge;
+	private driver[] drivers;
+	public service(double charge,driver[] drivers) {
+		this.charge=charge;
+		this.drivers=drivers;
+	}
+	public driver FindNearDriver(String reqcar) {
+		driver neardriver=null;
+
+		for(driver drivers : drivers) {
+			if(drivers.getrate() >= 4 && (reqcar.equals("")|| drivers.getModel().equals(reqcar))) {
+				if(neardriver == null || drivers.getdistance()<neardriver.getdistance()) {
+					neardriver = drivers;
+				}
+			}
+		}
+		return neardriver;
+	}
+	public double calCharge(double ridedis) {
+		return ridedis * charge;
+	}
+
+}
+
+  package Rentride;
+import java.util.Scanner;
+
+public class mains{
+	public static void main(String[] args) {
+		driver[] drivers = {
+				new driver("A","Sedan",4,500),
+				new driver("B","HatchBack",4.3,1000),
+				new driver("C","5 Seater",4.8,200),
+				new driver("D","Sedan",4.1,700),
+				new driver("E","HatchBack",4.7,430)
+		};
+		service rent=new service(8,drivers);
+		double rdistance = 0.0 ;
+		Scanner sc= new Scanner(System.in);
+		System.out.println("Enter distance in km : ");
+		rdistance =sc.nextDouble();
+		String reqcar;
+		System.out.println("Enter req cartype : ");
+		int opt= sc.nextInt();
+
+		switch(opt) {
+		case 1:
+			reqcar = "Sedan";
+			break;
+		case 2:
+			reqcar="HatchBack";
+			break;
+		case 3:
+			reqcar="5 Seater";
+			break;
+		default:
+			System.out.println("Invalid option");
+			return;
+		}
+		driver neardriver=rent.FindNearDriver(reqcar);
+		if(neardriver != null) {
+			System.out.println("Driver "+neardriver.getname() + " destination");
+			double totcharge = rent.calCharge(rdistance);
+			System.out.println("charge will be RS " +totcharge);
+		}
+		else {
+			System.out.println("No available cars");
+		}
+		
+		
+	}
+	
+
+}
+
